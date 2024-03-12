@@ -24,4 +24,5 @@ jobs:
           node-version: 18.x
 
       - name: Get version
+        working-directory: ./
         run: node ./getVersion.js app.config.js version
