@@ -26,6 +26,6 @@ jobs:
       - name: Get version
         working-directory: /
         run: |
-          ls
           pwd
+          echo ${{ github.workspace }}
           node ./getVersion.js app.config.js version
