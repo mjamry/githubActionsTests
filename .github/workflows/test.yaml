@@ -4,7 +4,7 @@ on:
 
 jobs:
   update:
-    name: EAS development Update
+    name: TEST
     runs-on: ubuntu-latest
 
     permissions:
@@ -22,7 +22,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
-          cache: yarn
 
       - name: Get version
         run: node ./getVersion.js app.config.js version
