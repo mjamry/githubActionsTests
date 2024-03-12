@@ -32,10 +32,18 @@ const rl = readline.createInterface({
 
 rl.on('line', (line) => {
   if (line.includes(fieldName)) {
-    var match = line.match(/(`"${fieldName}"`:\s*")(\d+(\.\d+){2})(")/);
+    var match = line.match(/("version":\s*")(\d+(\.\d+){2})(")/);
     if(match) {
       version = match[2];
       console.log(match[2]);
     }
   }
 });
+
+// console.log(version);
+// if(version){
+//   console.log(version);
+// } else {
+//   console.error(`Error. There is no ${fieldName} in the ${fileName} file.`);
+// }
+
