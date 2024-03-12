@@ -25,4 +25,7 @@ jobs:
 
       - name: Get version
         working-directory: /
-        run: node ./getVersion.js app.config.js version
+        run: |
+          ls
+          pwd
+          node ./getVersion.js app.config.js version
