@@ -26,7 +26,8 @@ jobs:
       - name: Get version
         working-directory: ${{ github.workspace }}
         run: |
-          pwd
-          ls
-          node ./getVersionScript.js app.config.js version
+          echo "{node ./getVersionScript.js app.config.js version}={test_var}" >> "$GITHUB_ENV"
           echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
+
+      - name: next step
+        run: echo "test var is $test_var"
