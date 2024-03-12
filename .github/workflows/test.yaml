@@ -17,7 +17,9 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-
+      - name: Version
+        run: node ./getVersionScript.js app.config.js version
+        
       - name: Get version
         working-directory: ${{ github.workspace }}
         id: version
