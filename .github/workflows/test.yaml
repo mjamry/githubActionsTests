@@ -18,14 +18,13 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
       - name: Version
-        run: node ./getVersionScript.js app.config.js version
+        id: version_1
+        run: node ./getVersionScript.js app.config.js version 
         
       - name: Get version
         working-directory: ${{ github.workspace }}
         id: version
-        run: |
-          echo node ./getVersionScript.js app.config.js version
-          echo "TEST_VAR=$(node ./getVersionScript.js app.config.js version)" >> "$GITHUB_ENV"
+        run: echo "TEST_VAR=1.1.5" >> "$GITHUB_ENV"
 
       - name: Version summary
         env: 
