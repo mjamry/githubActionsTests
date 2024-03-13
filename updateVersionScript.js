@@ -1,67 +1,53 @@
-// DESCRIPTION
-// Script to update app version
-// ARGS:
-//  1 - file name to
-//  2 - update type = 'minor' | 'major'
-
 const fs = require('fs');
-const readline = require('readline');
+const { program, Option } = require('commander');
 
-// Read the file name from command line arguments
-const fileName = process.argv[2];
-let updateType = process.argv[3];
+program
+  .description(`This script updates a specified field in a javascript or JSON file representing a version number according to the chosen update type ('minor' or 'major'). It provides flexibility in updating different version fields and supports custom file paths. Additionally, it outputs the original and updated versions after modification.`)
+  .requiredOption('-f, --file <type>', 'File name to update')
+  .addOption(new Option('-u, --update <type>', 'Type of version update')
+    .choices(['minor', 'major'])
+    .default('minor'))
+  .option('--field <type>', 'Field in file to update', 'version')
+  .parse(process.argv);
 
-if(fileName === undefined || fileName === null){
-    console.error('ERROR: File name not provided');
-    process.exit(1);
-}
+const options = program.opts();
+console.log(options, options.first, options.file, options.field);
 
-if(updateType !== 'minor' && updateType !== 'major'){
-    updateType = 'minor';
-}
 
-let currentVersion = "";
-let newVersion = "";
+let currentVersion = undefined;
+let newVersion = undefined;
 
-const increaseVersion = (data) => {
-  return data.replace(/("version":\s*")(\d+(\.\d+){2})(")/, (match, p1, p2, p3, p4) => {
+fs.readFile(options.file, 'utf8', (err, data) => {
+  if (err) {
+      console.error('Error reading file:', err);
+      process.exit(1);
+  }
+
+  const regexPattern = new RegExp(`("${options.field}":\\s*")(\\d+(\\.\\d+){2})(")`);
+  const newData = data.replace(regexPattern, (match, p1, p2, p3, p4) => {
     currentVersion = p2;
     const version = p2.split('.').map(Number);
-    if(updateType === 'minor'){
+    if(options.update === 'minor'){
       version[2]++;
-    } else if (updateType === 'major')
-    {
+    } else {
       version[1]++;
       version[2] = 0;
     }
     newVersion = version.join('.');
     return p1 + newVersion + p4;
   });
-};
 
-const rl = readline.createInterface({
-  input: fs.createReadStream(fileName),
-  output: process.stdout,
-  terminal: false
-});
-
-let updatedContent = '';
-
-rl.on('line', (line) => {
-  if (line.includes("version")) {
-    const updatedLine = increaseVersion(line);
-    updatedContent += updatedLine + '\n';
-  } else {
-    updatedContent += line + '\n';
+  if(currentVersion === undefined && newVersion === undefined) {
+    console.error(`Cannot find field ${options.field} in the file ${options.file}`);
+    process.exit(1);
   }
-});
 
-rl.on('close', () => {
-  fs.writeFile(fileName, updatedContent, (err) => {
-    if(err){
-      console.log(`Error while writing to file: ${err}`);
-    } else {
-      console.log(`App version updated: ${currentVersion} -> ${newVersion}`);
-    }
+  fs.writeFile(options.file, newData, 'utf8', (err) => {
+      if (err) {
+          console.error('Error writing to file:', err);
+          process.exit(1);
+      }
+      console.log(`${currentVersion} -> ${newVersion}`);
+      process.exit(0);
   });
 });
