@@ -18,13 +18,13 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
+      - name: Install dependencies
+        run: npm install commander 
           
       - name: Version
         id: version_1
-        run: node ./updateVersionScript.js -f app.config.js --field version 
+        run: node ./updateVersionScript.js -f app.config.js --field version
+        continue-on-error: false
         
       - name: Get version
         working-directory: ${{ github.workspace }}
