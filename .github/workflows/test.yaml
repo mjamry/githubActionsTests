@@ -19,7 +19,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
       - name: Version
         id: version_1
-        run: node ./getVersionScript.js app.config.js version 
+        run: node ./updateVersionScript.js -f app.config.js --field version 
         
       - name: Get version
         working-directory: ${{ github.workspace }}
