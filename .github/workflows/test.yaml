@@ -20,17 +20,18 @@ jobs:
           
       - name: Version
         working-directory: ${{ github.workspace }}
-        id: version_1
+        id: version
         run: | 
-          npm install commander
+          npm install commander >>
+          echo "VERSION=$(node ./.github/versionUpdate.js -f app.config.js --field version)" >> "$GITHUB_OUTPUT"
           node ./.github/versionUpdate.js -f app.config.js --field version
         continue-on-error: false
+      
+      - name: get version
+        env: 
+          VERSION: ${{ steps.version.outputs.VERSION }}
+        run: echo "App version update $VERSION"
         
-      - name: Get version
-        working-directory: ${{ github.workspace }}
-        id: version
-        run: echo "TEST_VAR=1.1.5" >> "$GITHUB_ENV"
-
       - name: Version summary
         env: 
           VERSION: ${{ steps.version.output.TEST_VAR }}
