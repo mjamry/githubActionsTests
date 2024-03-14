@@ -24,7 +24,9 @@ jobs:
       - name: Version
         working-directory: ${{ github.workspace }}
         id: version_1
-        run: node ./.github/versionUpdate.js -f ../app.config.js --field version
+        run: | 
+          echo pwd
+          node ./.github/versionUpdate.js -f app.config.js --field version
         continue-on-error: false
         
       - name: Get version
