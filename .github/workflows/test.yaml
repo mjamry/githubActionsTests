@@ -22,7 +22,7 @@ jobs:
         working-directory: ${{ github.workspace }}
         id: version
         run: | 
-          npm install commander >>
+          npm install commander > /dev/null
           echo "VERSION=$(node ./.github/versionUpdate.js -f app.config.js --field version)" >> "$GITHUB_OUTPUT"
           node ./.github/versionUpdate.js -f app.config.js --field version
         continue-on-error: false
