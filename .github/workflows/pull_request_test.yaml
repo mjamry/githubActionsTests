@@ -21,33 +21,16 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
-      - name: Install dependencies
-        run: npm install commander 
-          
       - name: Version
         working-directory: ${{ github.workspace }}
-        id: version_1
-        run: |
-          echo pwd
+        id: version
+        run: | 
+          npm install commander > /dev/null
+          echo "VERSION=$(node ./.github/versionUpdate.js -f app.config.js --field version)" >> "$GITHUB_OUTPUT"
           node ./.github/versionUpdate.js -f app.config.js --field version
         continue-on-error: false
-        
-      - name: Get version
-        working-directory: ${{ github.workspace }}
-        id: version
-        run: echo "TEST_VAR=1.1.5" >> "$GITHUB_ENV"
-
-      - name: Version summary
+      
+      - name: get version
         env: 
-          VERSION: ${{ steps.version.output.TEST_VAR }}
-        run: |
-          echo "test var is $VERSION"
-          echo "### Hello world! :rocket: $VERSION" >> $GITHUB_STEP_SUMMARY
-
-      - name: Set color
-        id: color-selector
-        run: echo "SELECTED_COLOR=$(node ./getVersionScript.js app.config.js version)" >> "$GITHUB_OUTPUT"
-      - name: Get color
-        env:
-          SELECTED_COLOR: ${{ steps.color-selector.outputs.SELECTED_COLOR }}
-        run: echo "The selected color is $SELECTED_COLOR"
+          VERSION: ${{ steps.version.outputs.VERSION }}
+        run: echo "App version update $VERSION"
