@@ -1,0 +1,53 @@
+name: pull_request_test
+on:
+  pull_request:
+    branches: master
+  workflow_dispatch
+
+jobs:
+  update:
+    name: PR_TEST
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+      - name: Install dependencies
+        run: npm install commander 
+          
+      - name: Version
+        working-directory: ${{ github.workspace }}
+        id: version_1
+        run: | 
+          echo ${{ github }}
+          echo pwd
+          node ./.github/versionUpdate.js -f app.config.js --field version
+        continue-on-error: false
+        
+      - name: Get version
+        working-directory: ${{ github.workspace }}
+        id: version
+        run: echo "TEST_VAR=1.1.5" >> "$GITHUB_ENV"
+
+      - name: Version summary
+        env: 
+          VERSION: ${{ steps.version.output.TEST_VAR }}
+        run: |
+          echo "test var is $VERSION"
+          echo "### Hello world! :rocket: $VERSION" >> $GITHUB_STEP_SUMMARY
+
+      - name: Set color
+        id: color-selector
+        run: echo "SELECTED_COLOR=$(node ./getVersionScript.js app.config.js version)" >> "$GITHUB_OUTPUT"
+      - name: Get color
+        env:
+          SELECTED_COLOR: ${{ steps.color-selector.outputs.SELECTED_COLOR }}
+        run: echo "The selected color is $SELECTED_COLOR"
