@@ -13,6 +13,7 @@ jobs:
       contents: read
       pull-requests: write
 
+    if: startsWith(github.head_ref, 'fix/') || startsWith(github.head_ref, 'change/')
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -26,8 +27,7 @@ jobs:
       - name: Version
         working-directory: ${{ github.workspace }}
         id: version_1
-        run: | 
-          echo ${{ toJson(github) }}
+        run: |
           echo pwd
           node ./.github/versionUpdate.js -f app.config.js --field version
         continue-on-error: false
