@@ -34,3 +34,9 @@ jobs:
         env: 
           VERSION: ${{ steps.version.outputs.VERSION }}
         run: echo "App version update $VERSION"
+
+  else_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Summary
+        run: echo "Just environment/maintanance change do not need any update" >> $GITHUB_STEP_SUMMARY
