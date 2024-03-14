@@ -1,7 +1,7 @@
 name: pull_request_test
 on:
   pull_request:
-    branches: master
+    branches: main
   workflow_dispatch:
 
 jobs:
