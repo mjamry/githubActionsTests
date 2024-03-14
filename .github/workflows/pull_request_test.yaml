@@ -27,7 +27,7 @@ jobs:
         working-directory: ${{ github.workspace }}
         id: version_1
         run: | 
-          echo ${{ github }}
+          echo ${{ toJson(github) }}
           echo pwd
           node ./.github/versionUpdate.js -f app.config.js --field version
         continue-on-error: false
