@@ -33,11 +33,9 @@ jobs:
         run: echo "App version update $VERSION"
         
       - name: Version summary
-        env: 
-          VERSION: ${{ steps.version.output.TEST_VAR }}
         run: |
-          echo "test var is $VERSION"
-          echo "### Hello world! :rocket: $VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "test var is ${{ steps.version.outputs.VERSION }}"
+          echo "### Hello world! :rocket: ${{ steps.version.outputs.VERSION }}" >> $GITHUB_STEP_SUMMARY
 
       - name: Set color
         id: color-selector
