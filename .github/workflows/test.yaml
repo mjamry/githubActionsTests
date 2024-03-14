@@ -17,15 +17,12 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-
-      - name: Install dependencies
-        run: npm install commander 
           
       - name: Version
         working-directory: ${{ github.workspace }}
         id: version_1
         run: | 
-          echo pwd
+          npm install commander
           node ./.github/versionUpdate.js -f app.config.js --field version
         continue-on-error: false
         
