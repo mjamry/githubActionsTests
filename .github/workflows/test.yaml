@@ -23,7 +23,7 @@ jobs:
           
       - name: Version
         id: version_1
-        run: node ./updateVersionScript.js -f app.config.js --field version
+        run: node ./updateVersionScript.js -f app.config.js --field versionss
         continue-on-error: false
         
       - name: Get version
