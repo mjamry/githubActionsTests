@@ -14,7 +14,23 @@ jobs:
       pull-requests: write
 
     #if: startsWith(github.head_ref, 'fix/') || startsWith(github.head_ref, 'change/')
+    
     steps:
+      - name: Determine source branch
+        run: |
+          SOURCE_BRANCH=""
+          DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@')
+
+          # Check if the pushed branch is not the default branch
+          if [ "${GITHUB_REF##*/}" != "$DEFAULT_BRANCH" ]; then
+            SOURCE_BRANCH="${GITHUB_REF##*/}"
+          fi
+
+          echo "Source branch is $SOURCE_BRANCH"
+
+      - name: Determine source branch 2
+        run: git rev-parse --abbrev-ref HEAD
+          
       - name: Context
         run: |
           echo: "${{ github.event.head_commit.ref }}"
