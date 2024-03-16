@@ -16,6 +16,13 @@ jobs:
     #if: startsWith(github.head_ref, 'fix/') || startsWith(github.head_ref, 'change/')
     
     steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+
       - name: Determine source branch
         run: |
           SOURCE_BRANCH=""
