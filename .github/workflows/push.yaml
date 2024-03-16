@@ -1,0 +1,45 @@
+name: pull_request_test
+on:
+  push:
+    branches: main
+  workflow_dispatch:
+
+jobs:
+  update:
+    name: PR_TEST
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    #if: startsWith(github.head_ref, 'fix/') || startsWith(github.head_ref, 'change/')
+    steps:
+      - name: Context
+        run: echo '${{ toJSON(github) }}'  
+  
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+      - name: Version
+        working-directory: ${{ github.workspace }}
+        id: version
+        run: | 
+          npm install commander > /dev/null
+          echo "VERSION=$(node ./.github/versionUpdate.js -f app.config.js --field version)" >> "$GITHUB_OUTPUT"
+          node ./.github/versionUpdate.js -f app.config.js --field version
+        continue-on-error: false
+      
+      - name: get version
+        env: 
+          VERSION: ${{ steps.version.outputs.VERSION }}
+        run: echo "App version update $VERSION"
+
+  else_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Summary
+        run: echo "Just environment/maintanance change do not need any update" >> $GITHUB_STEP_SUMMARY
