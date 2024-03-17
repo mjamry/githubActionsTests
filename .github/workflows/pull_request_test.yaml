@@ -17,14 +17,14 @@ jobs:
         id: is_maintenance
         run: |
           if [[ "${{ github.head_ref }}" =~ ^(fix/|change/) ]]; then
-            echo "result=true" >> "$GITHUB_OUTPUT"
-          else
             echo "result=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "result=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Summary
         run: |
-          echo "IsMaintenance: ${{ steps.output.is_maintenance.result }}"
+          echo "IsMaintenance: ${{ steps.is_maintenance.output.result }}"
 
 
   update:
