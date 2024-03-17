@@ -32,7 +32,7 @@ jobs:
           fi
 
       - name: Summary
-        run: "IsMerged: ${{ steps.output.is_merged.result }} | IsMaintenance: ${{ steps.output.is_maintenance.result }}"
+        run: echo "IsMerged ${{ steps.output.is_merged.result }} | IsMaintenance ${{ steps.output.is_maintenance.result }}"
 
   update:
     runs-on: ubuntu-latest
