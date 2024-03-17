@@ -23,7 +23,7 @@ jobs:
           fi
 
       - name: Summary
-        run: "IsMaintenance: ${{ steps.output.is_maintenance.result }}"
+        run: echo "IsMaintenance ${{ steps.output.is_maintenance.result }}"
 
 
   update:
