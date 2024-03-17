@@ -24,8 +24,7 @@ jobs:
 
       - name: Summary
         run: |
-          echo "IsMaintenance: ${{ steps.is_maintenance.output.result }}"
-
+          echo "IsMaintenance: ${{ steps.is_maintenance.outputs.result }}"
 
   update:
     runs-on: ubuntu-latest
