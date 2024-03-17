@@ -24,7 +24,15 @@ jobs:
           fi
       - name: Check if merged
         id: is_merged
-        run: echo "result=$(github.event.pull_request.merged == true)" >> "$GITHUB_OUTPUT"
+        run: |
+          if [[ "${{ github.event.pull_request.merged }}" == "true" ]]; then
+            echo "result=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "result=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Summary
+        run: "IsMerged: ${{ steps.output.is_merged.result }} | IsMaintenance: ${{ steps.output.is_maintenance.result }}"
 
   update:
     runs-on: ubuntu-latest
