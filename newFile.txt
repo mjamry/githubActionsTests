@@ -1,4 +1,0 @@
-some text
-
-new line 1
-.
