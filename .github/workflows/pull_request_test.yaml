@@ -2,6 +2,7 @@ name: pull_request_test
 on:
   pull_request:
     branches: main
+    types: [opened, synchronize, reopened]
   workflow_dispatch:
 
 jobs:
