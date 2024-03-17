@@ -50,8 +50,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.base.ref }}
+          repository: ${{ github.event.pull_request.head.base.full_name }}
 
       - name: Version
         working-directory: ${{ github.workspace }}
