@@ -1,4 +1,3 @@
-name: push_test
 on:
   pull_request:
     branches: main
@@ -18,9 +17,9 @@ jobs:
         id: is_maintenance
         run: |
           if [[ "${{ github.head_ref }}" =~ ^(fix/|change/) ]]; then
-            echo "result=true" >> "$GITHUB_OUTPUT"
-          else
             echo "result=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "result=true" >> "$GITHUB_OUTPUT"
           fi
       - name: Check if merged
         id: is_merged
@@ -32,12 +31,13 @@ jobs:
           fi
 
       - name: Summary
-        run: echo "IsMerged ${{ steps.output.is_merged.result }} | IsMaintenance ${{ steps.output.is_maintenance.result }}"
+        run: |
+          echo "IsMerged: ${{ steps.is_merged.outputs.result }} | IsMaintenance: ${{ steps.is_maintenance.outputs.result  }}"
 
   update:
     runs-on: ubuntu-latest
     needs: setup
-    if: ${{ needs.setup.outputs.is_maintenance == 'true' && needs.setup.outputs.is_merged == 'true' }}
+    if: ${{ needs.setup.outputs.is_maintenance == 'false' && needs.setup.outputs.is_merged == 'true' }}
 
     steps:
       - name: Update Task
@@ -66,7 +66,7 @@ jobs:
   maintenance:
     runs-on: ubuntu-latest
     needs: setup
-    if: ${{ needs.setup.outputs.is_maintenance != 'true' && needs.setup.outputs.is_merged == 'true' }}
+    if: ${{ needs.setup.outputs.is_maintenance == 'true' && needs.setup.outputs.is_merged == 'true' }}
 
     steps:
       - name: Maintenance Task
@@ -76,7 +76,7 @@ jobs:
   closed_pr:
     runs-on: ubuntu-latest
     needs: setup
-    if: ${{ needs.setup.outputs.is_merged != 'true' }}
+    if: ${{ needs.setup.outputs.is_merged == 'false' }}
 
     steps:
       - name: Maintenance Task
