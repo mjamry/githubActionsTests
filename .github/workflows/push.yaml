@@ -36,7 +36,11 @@ jobs:
           echo "Source branch is $SOURCE_BRANCH"
 
       - name: Determine source branch 2
-        run: git branch --contains ${{ github.event.head_commit.id }} | grep x
+        run: |
+          echo "git branch --contains ${{ github.event.head_commit.id }} | grep x"
+          git branch --contains ${{ github.event.head_commit.id }} | grep x
+          echo "git branch --contains ${{ github.event.head_commit.id }}"
+          echo "${{ toJSON(github.event) }}"
 
       - name: Context
         run: echo '${{ toJSON(github.event.pull_request) }}'  
