@@ -55,6 +55,12 @@ jobs:
         env: 
           VERSION: ${{ steps.version.outputs.VERSION }}
         run: echo "App version update $VERSION"
+      
+      - name: Summary
+        run: |
+          echo "Successfully updated UAT with 
+          app version ${{ steps.version_update.outputs.VERSION_SUMMARY }}
+          test !" >> $GITHUB_STEP_SUMMARY
 
   maintenance:
     runs-on: ubuntu-latest
